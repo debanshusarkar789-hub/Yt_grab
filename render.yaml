@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: yt-grab
+    env: node
+    buildCommand: cd frontend && npm install && npm run build && cd ../backend && npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
