@@ -101,7 +101,8 @@ app.post('/api/detect', async (req, res) => {
     const fullResult = execSync(`yt-dlp --js-runtimes deno --dump-json --no-playlist ${JSON.stringify(url)}`, { timeout: 30000, encoding: 'utf8' });
     const info = JSON.parse(fullResult);
     res.json({ type: 'video', ...parseVideoInfo(info) });
-  } catch {
+  } catch (e) {
+    console.error('Detect error:', e.message);
     res.status(400).json({ error: 'Could not fetch content. Check the URL.' });
   }
 });
@@ -227,5 +228,5 @@ app.get('/api/downloads', (req, res) => {
   res.json(list);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
