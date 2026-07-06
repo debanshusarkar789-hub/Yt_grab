@@ -3,16 +3,15 @@ services:
     name: yt-grab
     env: node
     buildCommand: |
+      mkdir -p bin
+      curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o bin/yt-dlp && chmod +x bin/yt-dlp
+      curl -fsSL https://deno.land/install.sh | sh -s -- -y
+      cp "$HOME/.deno/bin/deno" bin/deno && chmod +x bin/deno
       apt-get update -qq && apt-get install -y -qq ffmpeg 2>/dev/null
-      pip install yt-dlp 2>/dev/null || curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && chmod +x /usr/local/bin/yt-dlp
-      curl -fsSL https://deno.land/install.sh | sh
-      export DENO_INSTALL="$HOME/.deno"
-      export PATH="$DENO_INSTALL/bin:$PATH"
       cd frontend && npm install && npm run build
       cd ../backend && npm install
     startCommand: |
-      export DENO_INSTALL="$HOME/.deno"
-      export PATH="$DENO_INSTALL/bin:$PATH"
+      export PATH="$PWD/bin:$PATH"
       cd backend && node server.js
     envVars:
       - key: NODE_VERSION
