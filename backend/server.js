@@ -1,3 +1,17 @@
+// Check required tools at startup
+try { execSync('yt-dlp --version', { timeout: 5000, encoding: 'utf8' }); } catch (e) {
+  console.error('yt-dlp not found. Install: pip install yt-dlp');
+  process.exit(1);
+}
+try { execSync('deno --version', { timeout: 5000, encoding: 'utf8' }); } catch (e) {
+  console.error('deno not found. Install: curl -fsSL https://deno.land/install.sh | sh');
+  process.exit(1);
+}
+try { execSync('ffmpeg -version', { timeout: 5000, encoding: 'utf8' }); } catch (e) {
+  console.error('ffmpeg not found. Install: apt-get install ffmpeg');
+  process.exit(1);
+}
+
 const express = require('express');
 const cors = require('cors');
 const { spawn, execSync } = require('child_process');
